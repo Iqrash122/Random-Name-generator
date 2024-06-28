@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import HomeOptions from "../../../components/home_options";
 
+
 const homeContent = [
   {
     id: 1,
@@ -16,7 +17,6 @@ const homeContent = [
     slug: "Gender",
     alt: "Gender",
     des: "Lorem ipsum dolor sit amet, consectetur",
-    image2: "image2",
   },
   {
     id: 2,
@@ -25,7 +25,6 @@ const homeContent = [
     slug: "Region",
     alt: "Region",
     des: "Lorem ipsum dolor sit amet, consectetur",
-    image2: "image2",
   },
   {
     id: 3,
@@ -34,7 +33,6 @@ const homeContent = [
     image1: "image1",
     alt: "Surname",
     des: "Lorem ipsum dolor sit amet, consectetur",
-    image2: "image2",
   },
 ];
 

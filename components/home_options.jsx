@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export default function HomeOptions({ data }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -125,7 +126,7 @@ export default function HomeOptions({ data }) {
         </View>
         <TouchableOpacity onPress={toggleExpand}>
           <View style={styles.image2}>
-            <Text>{data.image2}</Text>
+            <FontAwesome5 name="arrow-down" size={24} color="black" />
           </View>
         </TouchableOpacity>
       </View>
