@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "RandomNameGenerator",
-    "slug": "RandomNameGenerator",
+    "slug": "randomnamegenerator",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -38,8 +38,15 @@
         "origin": false
       },
       "eas": {
-        "projectId": "b6cc27b2-a0c9-4587-aa0e-b6fcee75a8b7"
+        "projectId": "bdcb9dd2-8f5b-40e5-bde9-c45b11cae219"
       }
-    }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/bdcb9dd2-8f5b-40e5-bde9-c45b11cae219"
+    },
+    "owner": "webscare"
   }
 }
