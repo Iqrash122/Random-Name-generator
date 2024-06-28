@@ -1,19 +1,19 @@
-import { StyleSheet, Text, View } from "react-native"
+import { StyleSheet, Text, View } from 'react-native';
 
-export default function  DetailsScreen() {
-    return(
+export default function Generate(){
+    return (
         <>
             <View style={style.container}>
-                <Text style={{textAlign:"center"}}>
-                    Home Details Screen
-                </Text>
                 <Text>
-                      
+                    Generate 
                 </Text>
             </View>
+
+        
         </>
-    )
-}
+
+    );
+} ;
 
 const style = StyleSheet.create({
     container:{
@@ -22,3 +22,4 @@ const style = StyleSheet.create({
         alignContent:"center"
     }
 })
+
