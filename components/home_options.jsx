@@ -1,11 +1,30 @@
+import { AntDesign } from '@expo/vector-icons';
+import Checkbox from 'expo-checkbox';
 import React, { useState } from "react";
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { FontAwesome5 } from '@expo/vector-icons';
+import { SvgUri } from 'react-native-svg';
 
-export default function HomeOptions({ data }) {
+
+const regionName = [
+  { id: 1, text: "Spanish" },
+  { id: 2, text: "Urdu" },
+  { id: 3, text: "Hindi" },
+  { id: 4, text: "Arabic" },
+  { id: 5, text: "Korean" },
+  { id: 6, text: "Malay" },
+  { id: 7, text: "Chinese" },
+  { id: 8, text: "Irani" },
+  { id: 9, text: "Afghani" },
+];
+
+export default function HomeOptions({ data, setSelectedGender, setSelectedRegion, setSurname }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [inputText, setInputText] = useState("");
   const [filteredRegions, setFilteredRegions] = useState(regionName);
+  const [selectedRegion, setLocalSelectedRegion] = useState(null);
+  const [selectedGender, setLocalSelectedGender] = useState(null);
+  const [surname, setLocalSurname] = useState("");
+  
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
@@ -21,44 +40,67 @@ export default function HomeOptions({ data }) {
     setFilteredRegions(filtered);
   };
 
+  const handleSelectRegion = (region) => {
+    setLocalSelectedRegion(region);
+    setSelectedRegion(region); // Pass value to parent
+    // setTimeout(() => {
+    //   setIsExpanded(false); // Close the expandable list after 3 seconds
+    // }, 500);
+    
+  };
+
+  const handleGenderSelection = (gender) => {
+    setLocalSelectedGender(gender);
+    setSelectedGender(gender); // Pass value to parent
+    // setTimeout(() => {
+    //   setIsExpanded(false); // Close the expandable list after 3 seconds
+    // },500);
+  };
+
+  const handleSurnameInput = (text) => {
+    setLocalSurname(text);
+    setSurname(text); // Pass value to parent
+    
+  };
+
   const attributes = {
     1: [
-        <View >
-                <View
-                style={styles.attributeContainer}
-                key="attr1"
-             >
-                <View
-                style={styles.attributeBox}
-                >
-                    
-
-                </View>
-                
-
-                <View
-                style={styles.attributeBox}
-                ></View>
-
-        
-      </View>
-            <View style={{display:"flex", flexDirection:'row', columnGap:90, marginTop:6}}>
-                <View style={{justifyContent:"center", alignItems:"centers", textAlign:'center', marginLeft:29}}>
-                    <Text style={{textAlign:'center', width:34, height:12, fontSize:10, lineHeight:12, fontWeight:600}}>
-                        Male
-                    </Text>
-                </View>
-                <View style={{justifyContent:"center", alignItems:"centers"}}>
-                    <Text style={{textAlign:'center', width:34, height:12, fontSize:10, lineHeight:12, fontWeight:600, }}>
-                        Female
-                    </Text>
-                </View>
-            </View>
-
-
+      <View key="attr1" nestedScrollEnabled={true}>
+        <View style={styles.attributeContainer}>
+          <SvgUri  width={25} height={25} 
+          source={require('../assets/icons/male.png')}          
+          />
+          
+          <View style={styles.attributeBox}>
+            <Checkbox
+              style={styles.checkbox}
+              value={selectedGender === 'male'}
+              onValueChange={() => handleGenderSelection('male')}
+              color={selectedGender === 'male' ? '#55A5A7' : undefined}
+            />
+          </View>
+          <View style={styles.attributeBox}>
+            <Checkbox
+              style={styles.checkbox}
+              value={selectedGender === 'female'}
+              onValueChange={() => handleGenderSelection('female')}
+              color={selectedGender === 'female' ? '#55A5A7' : undefined}
+            />
+          </View>
         </View>
-
-     ,
+        <View style={{ display: "flex", flexDirection: 'row', marginTop: 6, columnGap: 87 }}>
+          <View style={{ justifyContent: "center", alignItems: "center", textAlign: 'center' }}>
+            <Text style={{ textAlign: 'center', width: 34, height: 12, fontSize: 10, lineHeight: 12, fontWeight: '600', marginLeft: 83 }}>
+              Male
+            </Text>
+          </View>
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <Text style={{ textAlign: 'center', width: 34, height: 12, fontSize: 10, lineHeight: 12, fontWeight: '600' }}>
+              Female
+            </Text>
+          </View>
+        </View>
+      </View>,
     ],
     2: [
       <View key="attr2">
@@ -73,46 +115,35 @@ export default function HomeOptions({ data }) {
             <Text style={styles.searchButton}>Search</Text>
           </TouchableOpacity>
         </View>
-        <View style={{flex:1}} >
-            <FlatList
-                data={filteredRegions}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                    <Text style={styles.regionText}>{item.text}</Text>
-                )}
-            />
-
-        </View>
-        
-      </View>,
+        <FlatList
+          scrollEnabled={false}
+          data={filteredRegions}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => handleSelectRegion(item.id)}>
+              <Text
+                style={[
+                  styles.regionText,
+                  item.id === selectedRegion && { backgroundColor: "#55A5A7", opacity: 70, color: "white" }
+                ]}
+              >
+                {item.text}
+              </Text>
+            </TouchableOpacity>
+          )}
+        />
+      </View>
     ],
     3: [
-
-        <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.searchInput}
-            onChangeText={inputHandler}
-            value={inputText}
-            placeholder="Enter Here"
-          />
-          <TouchableOpacity>
-            <Text style={styles.searchButton}>Search</Text>
-          </TouchableOpacity>
-        </View>
+      <View key="attr3" style={styles.searchContainers}>
+        <TextInput
+          style={styles.searchInput}
+          onChangeText={handleSurnameInput}
+          value={surname}
+          placeholder="Enter Here"
+        />
+      </View>,
     ],
   };
-
-  const regionName = [
-    { id: 1, text: "Spanish" },
-    { id: 2, text: "Urdu" },
-    { id: 3, text: "Hindi" },
-    { id: 4, text: "Arabic" },
-    { id: 5, text: "Korean" },
-    { id: 6, text: "Malay" },
-    { id: 7, text: "Chinese" },
-    { id: 8, text: "Irani" },
-    { id: 9, text: "Afghani" },
-  ];
 
   return (
     <>
@@ -126,16 +157,20 @@ export default function HomeOptions({ data }) {
         </View>
         <TouchableOpacity onPress={toggleExpand}>
           <View style={styles.image2}>
-            <FontAwesome5 name="arrow-down" size={24} color="black" />
+            {isExpanded ? (
+              <AntDesign name="up" size={24} color="#55A5A7" />
+            ) : (
+              <AntDesign name="down" size={24} color="#55A5A7" />
+            )}
           </View>
         </TouchableOpacity>
       </View>
       {isExpanded && (
         <View style={styles.expandableList}>
           {attributes[data.id]?.map((attr, index) => (
-            <Text key={index} style={styles.attributeText}>
+            <View key={index}>
               {attr}
-            </Text>
+            </View>
           ))}
         </View>
       )}
@@ -169,6 +204,7 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     marginTop: 40,
+    marginLeft: 20,
   },
   titleText: {
     width: 58,
@@ -185,7 +221,6 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     color: "#A7A7A7",
   },
-  
   attributeText: {
     fontSize: 14,
     lineHeight: 18,
@@ -204,6 +239,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     columnGap: 3,
     alignItems: "center",
+    marginLeft:-20
+    
   },
   searchInput: {
     width: 262,
@@ -213,6 +250,7 @@ const styles = StyleSheet.create({
     borderColor: "#55A5A7",
     marginVertical: 7,
     padding: 4,
+    
   },
   searchButton: {
     width: 77,
@@ -225,21 +263,22 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     textAlignVertical: "center",
-    color:"white"
+    color: "white",
   },
   regionText: {
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
+    color:"#818181",
+    fontSize:14,
+    lineHeight:16
   },
-  
   expandableList: {
     padding: 10,
     backgroundColor: "#f0f0f0",
     borderRadius: 8,
     marginLeft: 10,
     marginRight: 10,
-
   },
   attributeContainer: {
     flexDirection: "row",
@@ -254,4 +293,255 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#55A5A7",
   },
+  checkbox:{
+    marginLeft:67,
+    marginTop:5,
+    borderColor:"#55A5A7"
+
+  },
+  searchContainers: {
+    width: 358,
+    height: 41,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 0.5,
+    opacity: 70,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft:-20,
+    opacity:70,
+    marginLeft:-20
+    
+  },
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import { AntDesign } from '@expo/vector-icons';
+// import { useNavigation } from '@react-navigation/native';
+// import Checkbox from 'expo-checkbox';
+// import React, { useState } from "react";
+// import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+
+// const regionName = [
+//   { id: 1, text: "Spanish" },
+//   { id: 2, text: "Urdu" },
+//   { id: 3, text: "Hindi" },
+//   { id: 4, text: "Arabic" },
+//   { id: 5, text: "Korean" },
+//   { id: 6, text: "Malay" },
+//   { id: 7, text: "Chinese" },
+//   { id: 8, text: "Irani" },
+//   { id: 9, text: "Afghani" },
+// ];
+
+// export default function HomeOptions({ data, setSelectedGender, setSelectedRegion, setSurname }) {
+//   const navigation = useNavigation();
+//   const [isExpanded, setIsExpanded] = useState(false);
+//   const [inputText, setInputText] = useState("");
+//   const [filteredRegions, setFilteredRegions] = useState(regionName);
+//   const [selectedRegion, setLocalSelectedRegion] = useState(null);
+//   const [selectedGender, setLocalSelectedGender] = useState(null);
+//   const [surname, setLocalSurname] = useState("");
+
+//   const toggleExpand = () => {
+//     setIsExpanded(!isExpanded);
+//   };
+
+//   const inputHandler = (text) => {
+//     const lowerCase = text.toLowerCase();
+//     setInputText(lowerCase);
+
+//     const filtered = regionName.filter((region) =>
+//       region.text.toLowerCase().includes(lowerCase)
+//     );
+//     setFilteredRegions(filtered);
+//   };
+
+//   const handleSelectRegion = (region) => {
+//     setLocalSelectedRegion(region);
+//     setSelectedRegion(region); // Pass value to parent
+//     setTimeout(() => {
+//       setIsExpanded(false); // Close the expandable list after 3 seconds
+//     }, 500);
+//   };
+
+//   const handleGenderSelection = (gender) => {
+//     setLocalSelectedGender(gender);
+//     setSelectedGender(gender); // Pass value to parent
+//     setTimeout(() => {
+//       setIsExpanded(false); // Close the expandable list after 3 seconds
+//     }, 500);
+//   };
+
+//   const handleSurnameInput = (text) => {
+//     setLocalSurname(text);
+//     setSurname(text); // Pass value to parent
+//   };
+
+//   const attributes = {
+//     1: [
+//       <View key="attr1" nestedScrollEnabled={true}>
+//         <View style={styles.attributeContainer}>
+//           <View style={styles.attributeBox}>
+//             <Checkbox
+//               style={styles.checkbox}
+//               value={selectedGender === 'male'}
+//               onValueChange={() => handleGenderSelection('male')}
+//               color={selectedGender === 'male' ? '#55A5A7' : undefined}
+//             />
+//           </View>
+//           <View style={styles.attributeBox}>
+//             <Checkbox
+//               style={styles.checkbox}
+//               value={selectedGender === 'female'}
+//               onValueChange={() => handleGenderSelection('female')}
+//               color={selectedGender === 'female' ? '#55A5A7' : undefined}
+//             />
+//           </View>
+//         </View>
+//         <View style={{ display: "flex", flexDirection: 'row', marginTop: 6, columnGap: 87 }}>
+//           <View style={{ justifyContent: "center", alignItems: "center", textAlign: 'center' }}>
+//             <Text style={{ textAlign: 'center', width: 34, height: 12, fontSize: 10, lineHeight: 12, fontWeight: '600', marginLeft: 83 }}>
+//               Male
+//             </Text>
+//           </View>
+//           <View style={{ justifyContent: "center", alignItems: "center" }}>
+//             <Text style={{ textAlign: 'center', width: 34, height: 12, fontSize: 10, lineHeight: 12, fontWeight: '600' }}>
+//               Female
+//             </Text>
+//           </View>
+//         </View>
+//       </View>,
+//     ],
+//     2: [
+//       <View key="attr2">
+//         <View style={styles.searchContainer}>
+//           <TextInput
+//             style={styles.searchInput}
+//             onChangeText={inputHandler}
+//             value={inputText}
+//             placeholder="Type Category"
+//           />
+//           <TouchableOpacity>
+//             <Text style={styles.searchButton}>Search</Text>
+//           </TouchableOpacity>
+//         </View>
+//         <FlatList
+//           scrollEnabled={false}
+//           data={filteredRegions}
+//           renderItem={({ item }) => (
+//             <TouchableOpacity onPress={() => handleSelectRegion(item.text)}>
+//               <Text style={styles.regionName}>{item.text}</Text>
+//             </TouchableOpacity>
+//           )}
+//           keyExtractor={(item) => item.id.toString()}
+//         />
+//       </View>,
+//     ],
+//     3: [
+//       <View key="attr3" style={styles.surnameContainer}>
+//         <TextInput
+//           style={styles.surnameInput}
+//           placeholder="Enter Surname"
+//           value={surname}
+//           onChangeText={handleSurnameInput}
+//         />
+//       </View>,
+//     ],
+//   };
+
+//   return (
+//     <View style={styles.container}>
+//       <View style={styles.header} onPress={toggleExpand}>
+//         <Text style={styles.title}>{data.title}</Text>
+//         <TouchableOpacity onPress={toggleExpand}>
+//           <AntDesign name={isExpanded ? 'up' : 'down'} size={24} color="#55A5A7" />
+//         </TouchableOpacity>
+//       </View>
+//       {isExpanded && <View style={styles.content}>{attributes[data.id]}</View>}
+//     </View>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     backgroundColor: "#FFF",
+//     borderRadius: 5,
+//     marginBottom: 10,
+//     paddingHorizontal: 10,
+//     paddingVertical: 15,
+//   },
+//   header: {
+//     flexDirection: "row",
+//     justifyContent: "space-between",
+//     alignItems: "center",
+//   },
+//   title: {
+//     fontSize: 18,
+//     fontWeight: "bold",
+//     color: "#333",
+//   },
+//   content: {
+//     marginTop: 10,
+//   },
+//   attributeContainer: {
+//     flexDirection: "row",
+//     justifyContent: "space-between",
+//     marginTop: 10,
+//   },
+//   attributeBox: {
+//     flex: 1,
+//     justifyContent: "center",
+//     alignItems: "center",
+//   },
+//   checkbox: {
+//     width: 20,
+//     height: 20,
+//   },
+//   searchContainer: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//     marginTop: 10,
+//   },
+//   searchInput: {
+//     flex: 1,
+//     borderWidth: 1,
+//     borderColor: "#CCC",
+//     padding: 5,
+//     borderRadius: 5,
+//   },
+//   searchButton: {
+//     backgroundColor: "#55A5A7",
+//     color: "#FFF",
+//     padding: 5,
+//     borderRadius: 5,
+//     marginLeft: 10,
+//   },
+//   regionName: {
+//     paddingVertical: 5,
+//     paddingHorizontal: 10,
+//     borderBottomWidth: 1,
+//     borderBottomColor: "#CCC",
+//   },
+//   surnameContainer: {
+//     marginTop: 10,
+//   },
+//   surnameInput: {
+//     borderWidth: 1,
+//     borderColor: "#CCC",
+//     padding: 5,
+//     borderRadius: 5,
+//   },
+// });

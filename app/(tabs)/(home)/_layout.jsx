@@ -5,7 +5,9 @@ const HomeLayout = ()=>{
         <>
             <Stack>
                 <Stack.Screen name="index" options={{title:'Home',headerShown:false}} />
-                <Stack.Screen name='home_details' options={{title:"Home Details",headerShown:true}}/>
+                <Stack.Screen name="generate" options={{title:'Generate',headerShown:false}} />
+
+                <Stack.Screen name='home_details' options={{title:"Favorite",headerShown:false}}/>
             </Stack>
         
         </>
