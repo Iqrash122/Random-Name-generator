@@ -1,9 +1,12 @@
 import { AntDesign } from '@expo/vector-icons';
 import Checkbox from 'expo-checkbox';
 import React, { useState } from "react";
-import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { SvgUri } from 'react-native-svg';
+import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
+
+import { Image } from 'expo-image';
+import IconFemale from '../assets/icons/feMale.png';
+import IconMale from '../assets/icons/male.png';
 
 const regionName = [
   { id: 1, text: "Spanish" },
@@ -67,17 +70,17 @@ export default function HomeOptions({ data, setSelectedGender, setSelectedRegion
     1: [
       <View key="attr1" nestedScrollEnabled={true}>
         <View style={styles.attributeContainer}>
-          <SvgUri  width={25} height={25} 
-          source={require('../assets/icons/male.png')}          
-          />
-          
           <View style={styles.attributeBox}>
+            
             <Checkbox
               style={styles.checkbox}
               value={selectedGender === 'male'}
               onValueChange={() => handleGenderSelection('male')}
               color={selectedGender === 'male' ? '#55A5A7' : undefined}
             />
+            <Image source={IconMale} width={65} height={77}  style={{justifyContent:"center", alignItems:'center',marginTop:5, marginLeft:19.5, marginBottom:9}} />
+            {/* <IconMale width={65} height={60} style={{justifyContent:"center", alignItems:'center',marginTop:5, marginLeft:12, marginBottom:9}} /> */}
+
           </View>
           <View style={styles.attributeBox}>
             <Checkbox
@@ -86,6 +89,8 @@ export default function HomeOptions({ data, setSelectedGender, setSelectedRegion
               onValueChange={() => handleGenderSelection('female')}
               color={selectedGender === 'female' ? '#55A5A7' : undefined}
             />
+             <Image source={IconFemale} width={65} height={77}  style={{justifyContent:"center", alignItems:'center',marginTop:4.2, marginLeft:19.5, marginBottom:9}} />
+            {/* <IconFemale width={65} height={60} style={{justifyContent:"center", alignItems:'center',marginTop:5, marginLeft:12, marginBottom:9}}  /> */}
           </View>
         </View>
         <View style={{ display: "flex", flexDirection: 'row', marginTop: 6, columnGap: 87 }}>
@@ -119,11 +124,11 @@ export default function HomeOptions({ data, setSelectedGender, setSelectedRegion
           scrollEnabled={false}
           data={filteredRegions}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => handleSelectRegion(item.id)}>
+            <TouchableOpacity onPress={() => handleSelectRegion(item.text)}>
               <Text
                 style={[
                   styles.regionText,
-                  item.id === selectedRegion && { backgroundColor: "#55A5A7", opacity: 70, color: "white" }
+                  item.text === selectedRegion && { backgroundColor: "#55A5A7", opacity: 70, color: "white" }
                 ]}
               >
                 {item.text}
@@ -146,10 +151,11 @@ export default function HomeOptions({ data, setSelectedGender, setSelectedRegion
   };
 
   return (
-    <>
+    <SafeAreaView>
+      <>
       <View style={styles.container}>
         <View style={styles.image1}>
-          <Text>{data.image1}</Text>
+          <data.image1  width={50} height={50} />
         </View>
         <View style={styles.title}>
           <Text style={styles.titleText}>{data.title}</Text>
@@ -175,6 +181,10 @@ export default function HomeOptions({ data, setSelectedGender, setSelectedRegion
         </View>
       )}
     </>
+
+
+    </SafeAreaView>
+    
   );
 }
 
@@ -242,6 +252,9 @@ const styles = StyleSheet.create({
     marginLeft:-20
     
   },
+  icon: {
+    marginBottom: 5,
+  },
   searchInput: {
     width: 262,
     height: 28,
@@ -287,14 +300,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   attributeBox: {
-    width: 92,
-    height: 92,
+    width: 105,
+    height: 108,
     borderRadius: 6,
     borderWidth: 1,
     borderColor: "#55A5A7",
+    backgroundColor:'white'
   },
   checkbox:{
-    marginLeft:67,
+    marginLeft:74,
     marginTop:5,
     borderColor:"#55A5A7"
 
