@@ -51,7 +51,7 @@ export default function Favorite() {
           <Text style={styles.titles}>Favorite</Text>
         </View>
         <FlatList style={{marginTop:46}}
-          scrollEnabled={false}
+          
           data={FavoriteList}
           renderItem={({ item }) => (
 

@@ -1,12 +1,19 @@
-import { AntDesign } from '@expo/vector-icons';
-import Checkbox from 'expo-checkbox';
+import { AntDesign, FontAwesome6 } from "@expo/vector-icons";
+import Checkbox from "expo-checkbox";
 import React, { useState } from "react";
-import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-
-import { Image } from 'expo-image';
-import IconFemale from '../assets/icons/feMale.png';
-import IconMale from '../assets/icons/male.png';
+import { Image } from "expo-image";
+import IconFemale from "../assets/icons/feMale.png";
+import IconMale from "../assets/icons/male.png";
 
 const regionName = [
   { id: 1, text: "Spanish" },
@@ -20,14 +27,18 @@ const regionName = [
   { id: 9, text: "Afghani" },
 ];
 
-export default function HomeOptions({ data, setSelectedGender, setSelectedRegion, setSurname }) {
+export default function HomeOptions({
+  data,
+  setSelectedGender,
+  setSelectedRegion,
+  setSurname,
+}) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [inputText, setInputText] = useState("");
   const [filteredRegions, setFilteredRegions] = useState(regionName);
   const [selectedRegion, setLocalSelectedRegion] = useState(null);
   const [selectedGender, setLocalSelectedGender] = useState(null);
   const [surname, setLocalSurname] = useState("");
-  
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
@@ -46,24 +57,23 @@ export default function HomeOptions({ data, setSelectedGender, setSelectedRegion
   const handleSelectRegion = (region) => {
     setLocalSelectedRegion(region);
     setSelectedRegion(region); // Pass value to parent
-    // setTimeout(() => {
-    //   setIsExpanded(false); // Close the expandable list after 3 seconds
-    // }, 500);
-    
+    setTimeout(() => {
+      setIsExpanded(false); 
+    }, 600);
   };
 
   const handleGenderSelection = (gender) => {
     setLocalSelectedGender(gender);
     setSelectedGender(gender); // Pass value to parent
-    // setTimeout(() => {
-    //   setIsExpanded(false); // Close the expandable list after 3 seconds
-    // },500);
+    setTimeout(() => {
+      setIsExpanded(false); 
+      
+    }, 600);
   };
 
   const handleSurnameInput = (text) => {
     setLocalSurname(text);
     setSurname(text); // Pass value to parent
-    
   };
 
   const attributes = {
@@ -71,36 +81,88 @@ export default function HomeOptions({ data, setSelectedGender, setSelectedRegion
       <View key="attr1" nestedScrollEnabled={true}>
         <View style={styles.attributeContainer}>
           <View style={styles.attributeBox}>
-            
             <Checkbox
               style={styles.checkbox}
-              value={selectedGender === 'male'}
-              onValueChange={() => handleGenderSelection('male')}
-              color={selectedGender === 'male' ? '#55A5A7' : undefined}
+              value={selectedGender === "male"}
+              onValueChange={() => handleGenderSelection("male")}
+              color={selectedGender === "male" ? "#55A5A7" : undefined}
             />
-            <Image source={IconMale} width={65} height={77}  style={{justifyContent:"center", alignItems:'center',marginTop:5, marginLeft:19.5, marginBottom:9}} />
+            <Image
+              source={IconMale}
+              width={65}
+              height={77}
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: 5,
+                marginLeft: 19.5,
+                marginBottom: 9,
+              }}
+            />
             {/* <IconMale width={65} height={60} style={{justifyContent:"center", alignItems:'center',marginTop:5, marginLeft:12, marginBottom:9}} /> */}
-
           </View>
           <View style={styles.attributeBox}>
             <Checkbox
               style={styles.checkbox}
-              value={selectedGender === 'female'}
-              onValueChange={() => handleGenderSelection('female')}
-              color={selectedGender === 'female' ? '#55A5A7' : undefined}
+              value={selectedGender === "female"}
+              onValueChange={() => handleGenderSelection("female")}
+              color={selectedGender === "female" ? "#55A5A7" : undefined}
             />
-             <Image source={IconFemale} width={65} height={77}  style={{justifyContent:"center", alignItems:'center',marginTop:4.2, marginLeft:19.5, marginBottom:9}} />
+            <Image
+              source={IconFemale}
+              width={65}
+              height={77}
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: 4.2,
+                marginLeft: 19.5,
+                marginBottom: 9,
+              }}
+            />
             {/* <IconFemale width={65} height={60} style={{justifyContent:"center", alignItems:'center',marginTop:5, marginLeft:12, marginBottom:9}}  /> */}
           </View>
         </View>
-        <View style={{ display: "flex", flexDirection: 'row', marginTop: 6, columnGap: 87 }}>
-          <View style={{ justifyContent: "center", alignItems: "center", textAlign: 'center' }}>
-            <Text style={{ textAlign: 'center', width: 34, height: 12, fontSize: 10, lineHeight: 12, fontWeight: '600', marginLeft: 83 }}>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            marginTop: 6,
+            columnGap: 87,
+          }}
+        >
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+            }}
+          >
+            <Text
+              style={{
+                textAlign: "center",
+                width: 34,
+                height: 12,
+                fontSize: 10,
+                lineHeight: 12,
+                fontWeight: "600",
+                marginLeft: 83,
+              }}
+            >
               Male
             </Text>
           </View>
           <View style={{ justifyContent: "center", alignItems: "center" }}>
-            <Text style={{ textAlign: 'center', width: 34, height: 12, fontSize: 10, lineHeight: 12, fontWeight: '600' }}>
+            <Text
+              style={{
+                textAlign: "center",
+                width: 34,
+                height: 12,
+                fontSize: 10,
+                lineHeight: 12,
+                fontWeight: "600",
+              }}
+            >
               Female
             </Text>
           </View>
@@ -128,7 +190,11 @@ export default function HomeOptions({ data, setSelectedGender, setSelectedRegion
               <Text
                 style={[
                   styles.regionText,
-                  item.text === selectedRegion && { backgroundColor: "#55A5A7", opacity: 70, color: "white" }
+                  item.text === selectedRegion && {
+                    backgroundColor: "#55A5A7",
+                    opacity: 70,
+                    color: "white",
+                  },
                 ]}
               >
                 {item.text}
@@ -136,7 +202,7 @@ export default function HomeOptions({ data, setSelectedGender, setSelectedRegion
             </TouchableOpacity>
           )}
         />
-      </View>
+      </View>,
     ],
     3: [
       <View key="attr3" style={styles.searchContainers}>
@@ -146,6 +212,14 @@ export default function HomeOptions({ data, setSelectedGender, setSelectedRegion
           value={surname}
           placeholder="Enter Here"
         />
+        <TouchableOpacity>
+          <FontAwesome6
+            name="check"
+            size={24}
+            color="white"
+            style={styles.searchButton}
+          />
+        </TouchableOpacity>
       </View>,
     ],
   };
@@ -153,38 +227,33 @@ export default function HomeOptions({ data, setSelectedGender, setSelectedRegion
   return (
     <SafeAreaView>
       <>
-      <View style={styles.container}>
-        <View style={styles.image1}>
-          <data.image1  width={50} height={50} />
-        </View>
-        <View style={styles.title}>
-          <Text style={styles.titleText}>{data.title}</Text>
-          <Text style={styles.descriptionText}>{data.des}</Text>
-        </View>
-        <TouchableOpacity onPress={toggleExpand}>
-          <View style={styles.image2}>
-            {isExpanded ? (
-              <AntDesign name="up" size={24} color="#55A5A7" />
-            ) : (
-              <AntDesign name="down" size={24} color="#55A5A7" />
-            )}
+        <View style={styles.container}>
+          <View style={styles.image1}>
+            <data.image1 width={50} height={50} />
           </View>
-        </TouchableOpacity>
-      </View>
-      {isExpanded && (
-        <View style={styles.expandableList}>
-          {attributes[data.id]?.map((attr, index) => (
-            <View key={index}>
-              {attr}
+          <View style={styles.title}>
+            <Text style={styles.titleText}>{data.title}</Text>
+            <Text style={styles.descriptionText}>{data.des}</Text>
+          </View>
+          <TouchableOpacity onPress={toggleExpand}>
+            <View style={styles.image2}>
+              {isExpanded ? (
+                <AntDesign name="up" size={24} color="#55A5A7" />
+              ) : (
+                <AntDesign name="down" size={24} color="#55A5A7" />
+              )}
             </View>
-          ))}
+          </TouchableOpacity>
         </View>
-      )}
-    </>
-
-
+        {isExpanded && (
+          <View style={styles.expandableList}>
+            {attributes[data.id]?.map((attr, index) => (
+              <View key={index}>{attr}</View>
+            ))}
+          </View>
+        )}
+      </>
     </SafeAreaView>
-    
   );
 }
 
@@ -249,8 +318,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     columnGap: 3,
     alignItems: "center",
-    marginLeft:-20
-    
+    marginLeft: -20,
   },
   icon: {
     marginBottom: 5,
@@ -263,7 +331,6 @@ const styles = StyleSheet.create({
     borderColor: "#55A5A7",
     marginVertical: 7,
     padding: 4,
-    
   },
   searchButton: {
     width: 77,
@@ -282,9 +349,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
-    color:"#818181",
-    fontSize:14,
-    lineHeight:16
+    color: "#818181",
+    fontSize: 14,
+    lineHeight: 16,
   },
   expandableList: {
     padding: 10,
@@ -305,13 +372,12 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     borderWidth: 1,
     borderColor: "#55A5A7",
-    backgroundColor:'white'
+    backgroundColor: "white",
   },
-  checkbox:{
-    marginLeft:74,
-    marginTop:5,
-    borderColor:"#55A5A7"
-
+  checkbox: {
+    marginLeft: 74,
+    marginTop: 5,
+    borderColor: "#55A5A7",
   },
   searchContainers: {
     width: 358,
@@ -322,25 +388,11 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    marginLeft:-20,
-    opacity:70,
-    marginLeft:-20
-    
+    marginLeft: -20,
+    opacity: 70,
+    marginLeft: -20,
   },
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import { AntDesign } from '@expo/vector-icons';
 // import { useNavigation } from '@react-navigation/native';

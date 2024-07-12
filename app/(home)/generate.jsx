@@ -1,17 +1,66 @@
-import { EvilIcons, Octicons } from '@expo/vector-icons';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { AntDesign, EvilIcons, Octicons } from "@expo/vector-icons";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import axios from "axios";
-import { Link } from 'expo-router';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-const baseUrl = 'https://chatgpt-api.shn.hk/v1/'
+import { Link } from "expo-router";
+import React, { useEffect, useState } from "react";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+
+const baseUrl = "https://chatgpt-api.shn.hk/v1/";
 
 const GenerateScreen = () => {
+  const FavoriteList = [
+    {
+      id: 1,
+      title: "Marie Sofia",
+      des: "Gender, Jews, Marie",
+    },
+    {
+      id: 2,
+      title: "Marie Sofia",
+      des: "Gender, Jews, Marie",
+    },
+    {
+      id: 3,
+      title: "Marie Sofia",
+      des: "Gender, Jews, Marie",
+    },
+    {
+      id: 4,
+      title: "Marie Sofia",
+      des: "Gender, Jews, Marie",
+    },
+    {
+      id: 5,
+      title: "Marie Sofia",
+      des: "Gender, Jews, Marie",
+    },
+    {
+      id: 6,
+      title: "Marie Sofia",
+      des: "Gender, Jews, Marie",
+    },
+    {
+      id: 7,
+      title: "Marie Sofia",
+      des: "Gender, Jews, Marie",
+    },
+    {
+      id: 8,
+      title: "Marie Sofia",
+      des: "Gender, Jews, Marie",
+    },
+  ];
   const navigation = useNavigation();
   const route = useRoute();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);  
+  const [error, setError] = useState(null);
   const [selectedGender, setSelectedGender] = useState(null);
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [surname, setSurname] = useState("");
@@ -20,6 +69,14 @@ const GenerateScreen = () => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [errorFlag, setErrorFlag] = useState(false);
+  const [selectedItems, setSelectedItems] = useState({});
+
+  const toggleHeart = (id) => {
+    setSelectedItems((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }));
+  };
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -31,9 +88,9 @@ const GenerateScreen = () => {
         const response = await axios.get(url, {
           signal: abortController.signal,
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer https://chatgpt-api.shn.hk/v1/` // Replace with your actual API key
-          }
+            "Content-Type": "application/json",
+            Authorization: `Bearer https://chatgpt-api.shn.hk/v1/`, // Replace with your actual API key
+          },
         });
 
         if (response.status === 200) {
@@ -53,7 +110,7 @@ const GenerateScreen = () => {
     };
 
     fetchUsers();
-    console.log(fetchUsers())
+    console.log(fetchUsers());
 
     return () => abortController.abort("Data fetching cancelled");
   }, [selectedGender, selectedRegion, surname]);
@@ -71,40 +128,92 @@ const GenerateScreen = () => {
   const routeSelectedRegion = params?.selectedRegion || null;
   const routeSurname = params?.surname || "";
 
-  const generatedName = routeSelectedGender && routeSelectedRegion && routeSurname
-    ? `Generate Name ${routeSelectedGender}-${routeSelectedRegion}-${routeSurname}`
-    : 'Please select options to generate a name.';
+  const generatedName =
+    routeSelectedGender && routeSelectedRegion && routeSurname
+      ? `Generate Name ${routeSelectedGender}-${routeSelectedRegion}-${routeSurname}`
+      : "Please select options to generate a name.";
 
   return (
-    
     <View style={{ flex: 1 }}>
-        <View style={styles.logo}>
-          <TouchableOpacity>
-            <Link href={"/(home)"} style={{marginTop:14, marginLeft:13}}>
-              <Octicons name="chevron-left" size={24} color="white" />
-            </Link>
-          </TouchableOpacity>
-          <Text style={{marginTop:16, width:85,height:19, fontSize:16.09, lineHeight:19.47, fontWeight:600, color:'white'}}>
-            Your Name
-          </Text>
-        </View>
-
-        <View style={styles.container}>
-       
-          <Text style={styles.containerText}>{generatedName}</Text>
-          <Text style={styles.containerText1}>{routeSelectedRegion} {routeSelectedGender}</Text>
-        </View>
-
-        <View style={styles.containerMean}>
-          <Text style={styles.containerMeanText}>
-            Meaning of this name is lorem Ipsum dolar, lorem Ipsum dolar
-            lorem Ipsum, lorem Ipsum dolar lorem Ipsum, lorem Ipsum
-            dolar lorem Ipsum
-          </Text>
-        </View>
-        <TouchableOpacity style={styles.generateButton} onPress={handleGenerate}>
-          <EvilIcons name="refresh" size={37} color="white" />
+      <View style={styles.logo}>
+        <TouchableOpacity>
+          <Link href={"/(home)"} style={{ marginTop: 14, marginLeft: 13 }}>
+            <Octicons name="chevron-left" size={24} color="white" />
+          </Link>
         </TouchableOpacity>
+        <Text
+          style={{
+            marginTop: 16,
+            width: 85,
+            height: 19,
+            fontSize: 16.09,
+            lineHeight: 19.47,
+            fontWeight: 600,
+            color: "white",
+          }}
+        >
+          Your Name
+        </Text>
+      </View>
+
+      <View style={styles.container}>
+        <Text style={styles.containerText}>{generatedName}</Text>
+        <Text style={styles.containerText1}>
+          {routeSelectedRegion} {routeSelectedGender}
+        </Text>
+      </View>
+
+      <View style={styles.containerMean}>
+        <Text style={styles.containerMeanText}>
+          Meaning of this name is lorem Ipsum dolar, lorem Ipsum dolar lorem
+          Ipsum, lorem Ipsum dolar lorem Ipsum, lorem Ipsum dolar lorem Ipsum
+        </Text>
+      </View>
+
+      <View style={{ flex: 1 }}>
+      <Text
+        style={{
+          marginLeft: 13,
+          marginTop: 24,
+          fontSize: 20,
+          color: "#55A5A7",
+          fontWeight: '700',
+        }}
+      >
+        Suggested Names
+      </Text>
+      <View style={{ flex: 1 }}>
+        <FlatList 
+          style={{ marginTop: 16 }}
+          data={FavoriteList}
+          keyExtractor={(item) => item.id.toString()} // Ensure each item has a unique id
+          renderItem={({ item }) => (
+            <View style={styles.view1}>
+              <View style={styles.view2}>
+                <Text style={{ fontSize: 16, lineHeight: 20, color: "#989898" }}>
+                  {item.title}
+                </Text>
+                <Text style={{ fontSize: 11, lineHeight: 20, color: "#989898" }}>
+                  {item.des}
+                </Text>
+              </View>
+
+              <TouchableOpacity onPress={() => toggleHeart(item.id)}>
+                <AntDesign
+                  name={selectedItems[item.id] ? "heart" : "hearto"} // Change icon based on state
+                  size={24}
+                  color="#55A5A7"
+                />
+              </TouchableOpacity>
+            </View>
+          )}
+          scrollEnabled={true} // Ensure FlatList is scrollable
+        />
+      </View>
+    </View>
+      <TouchableOpacity style={styles.generateButton} onPress={handleGenerate}>
+        <EvilIcons name="refresh" size={37} color="white" />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -112,79 +221,95 @@ const GenerateScreen = () => {
 export default GenerateScreen;
 
 const styles = StyleSheet.create({
-  logo:{
-    display:'flex',
-    flexDirection:"row",
-    columnGap:13.78,
-    backgroundColor:"#55A5A7",
-    width:385,
-    height:48,
-    marginTop:1.12,
-    textAlignVertical:"center",
-    marginTop:1.12
+  logo: {
+    display: "flex",
+    flexDirection: "row",
+    columnGap: 13.78,
+    backgroundColor: "#55A5A7",
+    width: 385,
+    height: 48,
+    marginTop: 1.12,
+    textAlignVertical: "center",
+    marginTop: 1.12,
   },
   overlayContainer: {
     flex: 1,
-    flexDirection: 'row', // Align items in a row
-    alignItems: 'center', // Center items vertically
-    justifyContent: 'space-between', // Space items between
+    flexDirection: "row", // Align items in a row
+    alignItems: "center", // Center items vertically
+    justifyContent: "space-between", // Space items between
     paddingHorizontal: 13, // Adjust padding to position the elements correctly
-   // Adjust padding to position the slider correctly
+    // Adjust padding to position the slider correctly
   },
   sliderContainer: {
     width: 24,
     height: 24,
     backgroundColor: "#55A5A7",
     borderRadius: 50,
-    marginLeft:320
-    
+    marginLeft: 320,
   },
-  container:{
-    width:308,
-    height:132,
-    borderRadius:5,
-    borderWidth:1,
-    borderColor:"#AAAAAA",
-    marginTop:11,
-    justifyContent:'center',
-    alignItems:'center',
-    display:'flex',
-    marginLeft:38,
-    rowGap:11
+  container: {
+    width: 308,
+    height: 132,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#AAAAAA",
+    marginTop: 11,
+    justifyContent: "center",
+    alignItems: "center",
+    display: "flex",
+    marginLeft: 38,
+    rowGap: 11,
   },
-  containerText:{
-    width:144,
-    height:22,
-    fontSize:18,
-    lineHeight:22,
-    textAlign:'center'
+  view1: {
+    display: "flex",
+    flexDirection: "row",
+    height: 60,
+    columnGap: 214,
+    borderWidth: 0.3,
+    borderColor: "#55A5A7",
+    justifyContent: "center",
+    textAlign: "center",
+    alignItems: "center",
   },
-  containerText1:{
-    width:46,
-    height:10,
-    fontSize:8,
-    lineHeight:10,
-    color:'#818181'
+  view2: {
+    display: "flex",
+    flexDirection: "column",
+    width: 105,
+    height: 32,
   },
-  containerMean:{
-    width:307,
-    height:69,
-    borderRadius:5,
-    borderWidth:1,
-    borderColor:"#AAAAAA",
-    marginTop:5,
-    justifyContent:'center',
-    alignItems:'center',
-    display:'flex',
-    marginLeft:38,
+  containerText: {
+    width: 144,
+    height: 22,
+    fontSize: 18,
+    lineHeight: 22,
+    textAlign: "center",
   },
-  containerMeanText:{
-    width:286,
-    height:39,
-    fontSize:10,
-    textAlign:'center',
-    lineHeight:12.5,
-    color:'#818181'
+  containerText1: {
+    width: 46,
+    height: 10,
+    fontSize: 8,
+    lineHeight: 10,
+    color: "#818181",
+  },
+  containerMean: {
+    width: 307,
+    height: 69,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#AAAAAA",
+    marginTop: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    display: "flex",
+    marginLeft: 38,
+  },
+  containerMeanText: {
+    width: 286,
+    height: 39,
+    fontSize: 10,
+    textAlign: "center",
+    lineHeight: 12.5,
+    color: "#818181",
   },
   generateButton: {
     backgroundColor: "#55A5A7",
@@ -192,40 +317,38 @@ const styles = StyleSheet.create({
     height: 37,
     borderRadius: 22,
     color: "white",
-    fontSize:14,
-    lineHeight:17,
-    alignItems:"center",
-    justifyContent:"center",
-    marginLeft:73,
-    marginTop:274,
+    fontSize: 14,
+    lineHeight: 17,
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: 73,
+    marginTop: 40,
+    marginBottom:30
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   errorText: {
     fontSize: 18,
-    color: 'red',
+    color: "red",
   },
-  container1:{
-    width:308,
-    height:132,
-    borderRadius:5,
-    borderWidth:1,
-    borderColor:"#AAAAAA",
-    marginTop:11,
-    justifyContent:'center',
-    alignItems:'center',
-    display:'flex',
-    marginLeft:38,
-    rowGap:11,
-    marginTop:75
+  container1: {
+    width: 308,
+    height: 132,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#AAAAAA",
+    marginTop: 11,
+    justifyContent: "center",
+    alignItems: "center",
+    display: "flex",
+    marginLeft: 38,
+    rowGap: 11,
+    marginTop: 75,
   },
 });
-
-
-
 
 // import { EvilIcons, Octicons } from '@expo/vector-icons';
 // import { useNavigation, useRoute } from '@react-navigation/native';
@@ -240,7 +363,7 @@ const styles = StyleSheet.create({
 //   const navigation = useNavigation();
 //   const route = useRoute();
 //   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);  
+//   const [error, setError] = useState(null);
 //   const [selectedGender, setSelectedGender] = useState(null);
 //   const [selectedRegion, setSelectedRegion] = useState(null);
 //   const [surname, setSurname] = useState("");
@@ -286,12 +409,12 @@ const styles = StyleSheet.create({
 //                  Your Name
 //               </Text>
 //              </View>
-    
+
 //              <View style={styles.container}>
 //                <Text style={styles.containerText}>{generatedName} MR Sally Ramos</Text>
 //                <Text style={styles.containerText1}>Spanish boy</Text>
 //              </View>
-    
+
 //              <View style={styles.containerMean}>
 //                <Text style={styles.containerMeanText}>
 //                  Meaning of this name is lorem Ipsum dolar, lorem Ipsum dolar
@@ -305,9 +428,9 @@ const styles = StyleSheet.create({
 //          </View>
 //       );
 //     };
-    
+
 //     export default GenerateScreen;
-    
+
 //     const styles = StyleSheet.create({
 //       logo:{
 //         display:'flex',
@@ -404,18 +527,6 @@ const styles = StyleSheet.create({
 //         marginTop:75
 //       },
 //     });
-    
-    
-
-
-
-
-
-
-
-
-
-
 
 // // import { useRoute } from '@react-navigation/native';
 // // import React, { useEffect, useState } from 'react';
@@ -442,7 +553,7 @@ const styles = StyleSheet.create({
 // //         if (!response.ok) {
 // //           throw new Error('Failed to fetch data');
 // //         }
-        
+
 // //         const data = await response.json();
 // //         console.log('Response JSON:', data); // Log the JSON data from the response
 
@@ -506,15 +617,6 @@ const styles = StyleSheet.create({
 // //   },
 // // });
 
-
-
-
-
-
-
-
-
-
 // import { EvilIcons, Octicons } from '@expo/vector-icons';
 // import { useNavigation, useRoute } from '@react-navigation/native';
 // import axios from 'axios';
@@ -542,12 +644,12 @@ const styles = StyleSheet.create({
 //     try {
 //       const response = await axios.post('https://api.openai.com/v1/chat/completions',
 //          {
-        
+
 //         gender: selectedGender,
 //         region: selectedRegion,
 //         surname: surname,
 //       });
-      
+
 //       setGeneratedName(response.data.generatedName);
 //     } catch (err) {
 //       setError("Failed to generate name. Please try again.");
@@ -654,4 +756,3 @@ const styles = StyleSheet.create({
 //     color: 'red',
 //   },
 // });
-

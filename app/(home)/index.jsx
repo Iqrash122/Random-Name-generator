@@ -171,7 +171,8 @@
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Link } from "expo-router";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+
 import {
   Animated,
   Easing,
@@ -242,20 +243,15 @@ const HomeScreen = () => {
         animatedValue.setValue(0);
       },
       onPanResponderMove: (evt, gestureState) => {
-        // Calculate swipe progress based on gesture distance
         const swipeProgress = gestureState.dx / 200; // Adjust this value for sensitivity
-
-        // Update animatedValue based on swipe progress
         animatedValue.setValue(swipeProgress);
       },
       onPanResponderRelease: (evt, gestureState) => {
-        // Determine swipe direction and change name accordingly
         if (gestureState.dx > 100) {
           changeName(-1); // Swipe to the left
         } else if (gestureState.dx < -100) {
           changeName(1); // Swipe to the right
         } else {
-          // If swipe is not significant, reset animation
           Animated.timing(animatedValue, {
             toValue: 0,
             duration: 300,
@@ -270,7 +266,6 @@ const HomeScreen = () => {
   const changeName = (direction) => {
     const newIndex = (currentIndex + direction + names.length) % names.length;
     setCurrentIndex(newIndex);
-
     Animated.timing(animatedValue, {
       toValue: 0,
       duration: 300,
@@ -278,6 +273,27 @@ const HomeScreen = () => {
       useNativeDriver: true,
     }).start();
   };
+
+  // Autoplay functionality
+  useEffect(() => {
+    const interval = setInterval(() => {
+      changeName(1); // Automatically change name every 3 seconds
+    }, 2000);
+
+    return () => clearInterval(interval); // Clear interval on component unmount
+  }, [currentIndex]);
+
+  // const changeName = (direction) => {
+  //   const newIndex = (currentIndex + direction + names.length) % names.length;
+  //   setCurrentIndex(newIndex);
+
+  //   Animated.timing(animatedValue, {
+  //     toValue: 0,
+  //     duration: 300,
+  //     easing: Easing.ease,
+  //     useNativeDriver: true,
+  //   }).start();
+  // };
 
   const handleGenerate = () => {
     console.log("Selected Gender: ", selectedGender);
@@ -291,8 +307,8 @@ const HomeScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, marginTop: 15, marginBottom:5 }}>
-      <ScrollView >
+    <SafeAreaView style={{ flex: 1, marginTop: 15, marginBottom: 5 }}>
+      <ScrollView>
         <View>
           <View
             style={{ display: "flex", flexDirection: "row", columnGap: 170 }}
