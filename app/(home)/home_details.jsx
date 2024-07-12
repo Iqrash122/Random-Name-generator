@@ -1,48 +1,31 @@
 import { AntDesign } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRoute } from '@react-navigation/native';
 import { Link } from "expo-router";
+import React, { useEffect, useState } from "react";
 import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function Favorite() {
-  const FavoriteList = [
-    {
-      id: 1,
-      title: "Marie Sofia",
-      des: "Gender, Jews, Marie",
-    },
-    {
-      id: 2,
-      title: "Marie Sofia",
-      des: "Gender, Jews, Marie",
-    },
-    {
-      id: 3,
-      title: "Marie Sofia",
-      des: "Gender, Jews, Marie",
-    },
-    {
-      id: 4,
-      title: "Marie Sofia",
-      des: "Gender, Jews, Marie",
-    },
-    {
-      id: 5,
-      title: "Marie Sofia",
-      des: "Gender, Jews, Marie",
-    },
-    {
-      id: 6,
-      title: "Marie Sofia",
-      des: "Gender, Jews, Marie",
-    },
-    {
-      id: 7,
-      title: "Marie Sofia",
-      des: "Gender, Jews, Marie",
-    },
+  const route = useRoute();
+  const [selectedItems, setSelectedItems] = useState([]);
 
-  ];
+  useEffect(() => {
+    const loadSelectedItems = async () => {
+      try {
+        const storedItems = await AsyncStorage.getItem('selectedItems');
+        if (storedItems) {
+          setSelectedItems(JSON.parse(storedItems));
+        }
+      } catch (error) {
+        console.error("Failed to load selected items from storage:", error);
+      }
+    };
+
+    loadSelectedItems();
+  }, []);
+
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <View>
         <View style={styles.header}>
           <Link href={"/(home)"} style={{ marginTop: 24 }}>
@@ -50,41 +33,30 @@ export default function Favorite() {
           </Link>
           <Text style={styles.titles}>Favorite</Text>
         </View>
-        <FlatList style={{marginTop:46}}
-          
-          data={FavoriteList}
+        <FlatList
+          style={{ marginTop: 46 }}
+          data={selectedItems}
           renderItem={({ item }) => (
-
-            <View style={styles.view1}> 
+            <View style={styles.view1}>
               <View style={styles.view2}>
-              <Text style={{fontSize:16, lineHeight:20, color:'#989898'}}>
+                <Text style={{ fontSize: 16, lineHeight: 20, color: '#989898' }}>
                   {item.title}
                 </Text>
-                <Text style={{fontSize:11, lineHeight:20, color:'#989898'}}>
+                <Text style={{ fontSize: 11, lineHeight: 20, color: '#989898' }}>
                   {item.des}
                 </Text>
               </View>
-
               <TouchableOpacity>
-
-                <AntDesign name="right" size={24} color="#55A5A7" />
+                <AntDesign name="heart" size={24} color="#55A5A7" />
               </TouchableOpacity>
-              
-
             </View>
-                
-               
-          
           )}
-        /> 
-
-
-
+          keyExtractor={(item) => item.id.toString()}
+        />
       </View>
     </SafeAreaView>
   );
 }
-
 const styles = StyleSheet.create({
   header: {
     display: "flex",
@@ -102,27 +74,21 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "black",
   },
-  view1:{
-    display:'flex',
-    flexDirection:"row",   
-    height:60,
-    columnGap:214,
-    borderWidth:0.3,
-    borderColor:'#55A5A7',
-    justifyContent:'center',
-    textAlign:"center",
-    alignItems:"center",
-    
-
-
-    
-
+  view1: {
+    display: 'flex',
+    flexDirection: "row",
+    height: 60,
+    columnGap: 214,
+    borderWidth: 0.3,
+    borderColor: '#55A5A7',
+    justifyContent: 'center',
+    textAlign: "center",
+    alignItems: "center",
   },
-  view2:{
-      display:'flex',
-      flexDirection:'column',
-      width:105,
-      height:32,
-
+  view2: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: 105,
+    height: 32,
   }
 });

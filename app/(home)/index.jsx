@@ -255,7 +255,7 @@ const HomeScreen = () => {
           Animated.timing(animatedValue, {
             toValue: 0,
             duration: 300,
-            easing: Easing.ease,
+            easing: Easing.linear,
             useNativeDriver: true,
           }).start();
         }
@@ -311,8 +311,8 @@ const HomeScreen = () => {
       <ScrollView>
         <View>
           <View
-            style={{ display: "flex", flexDirection: "row", columnGap: 170 }}
-          >
+            style={{ display: "flex", flexDirection: "row", columnGap: 145 }}
+           >
             <Text
               style={{
                 width: 161,
@@ -327,10 +327,11 @@ const HomeScreen = () => {
             >
               Name Generator
             </Text>
-
-            <Link href={"/home_details"} style={{ marginTop: 24 }}>
-              <AntDesign name="hearto" size={24} color="#55A5A7" />
-            </Link>
+            <View style={{display:'flex',}}>
+              <Link href={"/home_details"} style={{ marginTop: 24 }}>
+                <AntDesign name="hearto" size={24} color="#55A5A7" />
+              </Link>
+            </View>
           </View>
 
           <View style={styles.container}>
@@ -377,15 +378,18 @@ const HomeScreen = () => {
             >
               Select options
             </Text>
-
+            <View style={{alignItems:'center', justifyContent:'center'}}>
             <View style={{ display: "flex", flexDirection: "row" }}>
               <ScrollView
                 contentContainerStyle={{
                   marginTop: 12,
                   display: "flex",
                   flexDirection: "column",
-                  padding: 12,
-                  rowGap: 10,
+                  // padding: 12,
+                  // rowGap: 10,
+                  marginHorizontal:8,
+                  shadowColor:"black"
+                  
                 }}
               >
                 {homeContent.map((items) => (
@@ -399,6 +403,10 @@ const HomeScreen = () => {
                 ))}
               </ScrollView>
             </View>
+
+            </View>
+
+           
           </View>
           <TouchableOpacity
             onPress={handleGenerate}
@@ -425,6 +433,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 17,
     textAlignVertical: "center",
+    marginTop:50
   },
   container: {
     height: 131,

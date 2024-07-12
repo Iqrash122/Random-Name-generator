@@ -1,61 +1,23 @@
-import { AntDesign, EvilIcons, Octicons } from "@expo/vector-icons";
+import { AntDesign, Octicons } from "@expo/vector-icons";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useRoute } from "@react-navigation/native";
 import axios from "axios";
-
 import { Link } from "expo-router";
 import React, { useEffect, useState } from "react";
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Regenerate from '../../assets/icons/regenerate.svg';
 const baseUrl = "https://chatgpt-api.shn.hk/v1/";
 
 const GenerateScreen = () => {
   const FavoriteList = [
-    {
-      id: 1,
-      title: "Marie Sofia",
-      des: "Gender, Jews, Marie",
-    },
-    {
-      id: 2,
-      title: "Marie Sofia",
-      des: "Gender, Jews, Marie",
-    },
-    {
-      id: 3,
-      title: "Marie Sofia",
-      des: "Gender, Jews, Marie",
-    },
-    {
-      id: 4,
-      title: "Marie Sofia",
-      des: "Gender, Jews, Marie",
-    },
-    {
-      id: 5,
-      title: "Marie Sofia",
-      des: "Gender, Jews, Marie",
-    },
-    {
-      id: 6,
-      title: "Marie Sofia",
-      des: "Gender, Jews, Marie",
-    },
-    {
-      id: 7,
-      title: "Marie Sofia",
-      des: "Gender, Jews, Marie",
-    },
-    {
-      id: 8,
-      title: "Marie Sofia",
-      des: "Gender, Jews, Marie",
-    },
+    { id: 1, title: "Marie Sofia", des: "Gender, Jews, Marie" },
+    { id: 2, title: "John Doe", des: "Gender, English, John" },
+    { id: 3, title: "Jane Smith", des: "Gender, American, Jane" },
+    { id: 4, title: "Marie Sofia", des: "Gender, Jews, Marie" },
+    { id: 5, title: "Marie Sofia", des: "Gender, Jews, Marie" },
+    { id: 6, title: "Marie Sofia", des: "Gender, Jews, Marie" },
+    { id: 7, title: "Marie Sofia", des: "Gender, Jews, Marie" },
+    { id: 8, title: "Marie Sofia", des: "Gender, Jews, Marie" },
   ];
   const navigation = useNavigation();
   const route = useRoute();
@@ -69,13 +31,41 @@ const GenerateScreen = () => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [errorFlag, setErrorFlag] = useState(false);
-  const [selectedItems, setSelectedItems] = useState({});
+  const [selectedItems, setSelectedItems] = useState([]);
 
-  const toggleHeart = (id) => {
-    setSelectedItems((prevState) => ({
-      ...prevState,
-      [id]: !prevState[id],
-    }));
+  useEffect(() => {
+    const loadSelectedItems = async () => {
+      try {
+        const storedItems = await AsyncStorage.getItem('selectedItems');
+        if (storedItems) {
+          setSelectedItems(JSON.parse(storedItems));
+        }
+      } catch (error) {
+        console.error("Failed to load selected items from storage:", error);
+      }
+    };
+
+    loadSelectedItems();
+  }, []);
+
+  useEffect(() => {
+    const storeSelectedItems = async () => {
+      try {
+        await AsyncStorage.setItem('selectedItems', JSON.stringify(selectedItems));
+      } catch (error) {
+        console.error("Failed to store selected items:", error);
+      }
+    };
+
+    storeSelectedItems();
+  }, [selectedItems]);
+
+  const toggleHeart = (item) => {
+    if (selectedItems.some((selectedItem) => selectedItem.id === item.id)) {
+      setSelectedItems(selectedItems.filter((selectedItem) => selectedItem.id !== item.id));
+    } else {
+      setSelectedItems([...selectedItems, item]);
+    }
   };
 
   useEffect(() => {
@@ -123,6 +113,10 @@ const GenerateScreen = () => {
     });
   };
 
+  const handleNavigateToFavorite = () => {
+    navigation.navigate("favorite", { selectedItems });
+  };
+
   const { params } = route;
   const routeSelectedGender = params?.selectedGender || null;
   const routeSelectedRegion = params?.selectedRegion || null;
@@ -156,69 +150,78 @@ const GenerateScreen = () => {
         </Text>
       </View>
 
-      <View style={styles.container}>
-        <Text style={styles.containerText}>{generatedName}</Text>
-        <Text style={styles.containerText1}>
-          {routeSelectedRegion} {routeSelectedGender}
-        </Text>
+      <View style={{justifyContent:'center', alignItems:'center'}}>
+        <View style={styles.container}>
+          <Text style={styles.containerText}>{generatedName}</Text>
+          <Text style={styles.containerText1}>
+            {routeSelectedRegion} {routeSelectedGender}
+          </Text>
+        </View>
+
+        <View style={styles.containerMean}>
+          <Text style={styles.containerMeanText}>
+            Meaning of this name is lorem Ipsum dolar, lorem Ipsum dolar lorem
+            Ipsum, lorem Ipsum dolar lorem Ipsum, lorem Ipsum dolar lorem Ipsum
+          </Text>
       </View>
 
-      <View style={styles.containerMean}>
-        <Text style={styles.containerMeanText}>
-          Meaning of this name is lorem Ipsum dolar, lorem Ipsum dolar lorem
-          Ipsum, lorem Ipsum dolar lorem Ipsum, lorem Ipsum dolar lorem Ipsum
-        </Text>
       </View>
 
+      
+
       <View style={{ flex: 1 }}>
-      <Text
-        style={{
-          marginLeft: 13,
-          marginTop: 24,
-          fontSize: 20,
-          color: "#55A5A7",
-          fontWeight: '700',
-        }}
-      >
-        Suggested Names
-      </Text>
-      <View style={{ flex: 1 }}>
-        <FlatList 
-          style={{ marginTop: 16 }}
-          data={FavoriteList}
-          keyExtractor={(item) => item.id.toString()} // Ensure each item has a unique id
-          renderItem={({ item }) => (
-            <View style={styles.view1}>
-              <View style={styles.view2}>
-                <Text style={{ fontSize: 16, lineHeight: 20, color: "#989898" }}>
-                  {item.title}
-                </Text>
-                <Text style={{ fontSize: 11, lineHeight: 20, color: "#989898" }}>
-                  {item.des}
-                </Text>
+        <Text
+          style={{
+            marginLeft: 13,
+            marginTop: 24,
+            fontSize: 20,
+            color: "#55A5A7",
+            fontWeight: '700',
+          }}
+        >
+          Suggested Names
+        </Text>
+        <View style={{ flex: 1 }}>
+          <FlatList 
+            style={{ marginTop: 16 }}
+            data={FavoriteList}
+            keyExtractor={(item) => item.id.toString()} // Ensure each item has a unique id
+            renderItem={({ item }) => (
+              <View style={styles.view1}>
+                <View style={styles.view2}>
+                  <Text style={{ fontSize: 16, lineHeight: 20, color: "#989898" }}>
+                    {item.title}
+                  </Text>
+                  <Text style={{ fontSize: 11, lineHeight: 20, color: "#989898" }}>
+                    {item.des}
+                  </Text>
+                </View>
+
+                <TouchableOpacity onPress={() => toggleHeart(item)}>
+                  <AntDesign
+                    name={selectedItems.some((selectedItem) => selectedItem.id === item.id) ? "heart" : "hearto"} // Change icon based on state
+                    size={24}
+                    color="#55A5A7"
+                  />
+                </TouchableOpacity>
               </View>
-
-              <TouchableOpacity onPress={() => toggleHeart(item.id)}>
-                <AntDesign
-                  name={selectedItems[item.id] ? "heart" : "hearto"} // Change icon based on state
-                  size={24}
-                  color="#55A5A7"
-                />
-              </TouchableOpacity>
-            </View>
-          )}
-          scrollEnabled={true} // Ensure FlatList is scrollable
-        />
+            )}
+            scrollEnabled={true}
+          />
+        </View>
       </View>
-    </View>
-      <TouchableOpacity style={styles.generateButton} onPress={handleGenerate}>
-        <EvilIcons name="refresh" size={37} color="white" />
+      <TouchableOpacity style={styles.generateButton} >
+        <Regenerate  selectedGender={selectedGender}
+          selectedRegion={selectedRegion}
+          surname={surname}/>
+       
       </TouchableOpacity>
     </View>
   );
 };
 
 export default GenerateScreen;
+
 
 const styles = StyleSheet.create({
   logo: {
@@ -257,7 +260,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     display: "flex",
-    marginLeft: 38,
+    
     rowGap: 11,
   },
   view1: {
@@ -285,7 +288,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   containerText1: {
-    width: 46,
+    
     height: 10,
     fontSize: 8,
     lineHeight: 10,
@@ -301,7 +304,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     display: "flex",
-    marginLeft: 38,
+   
   },
   containerMeanText: {
     width: 286,
@@ -349,6 +352,26 @@ const styles = StyleSheet.create({
     marginTop: 75,
   },
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // import { EvilIcons, Octicons } from '@expo/vector-icons';
 // import { useNavigation, useRoute } from '@react-navigation/native';
