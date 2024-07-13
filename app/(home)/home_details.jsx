@@ -4,7 +4,7 @@ import { useRoute } from '@react-navigation/native';
 import { Link } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
+import Back from '../../assets/icons/back.svg';
 export default function Favorite() {
   const route = useRoute();
   const [selectedItems, setSelectedItems] = useState([]);
@@ -28,8 +28,9 @@ export default function Favorite() {
     <SafeAreaView style={{ flex: 1 }}>
       <View>
         <View style={styles.header}>
-          <Link href={"/(home)"} style={{ marginTop: 24 }}>
-            <AntDesign name="left" size={24} color="#55A5A7" />
+          <Link href={"/(home)"} style={{marginTop:7 }}>
+            {/* <AntDesign name="left" size={24} color="#55A5A7" /> */}
+            <Back />
           </Link>
           <Text style={styles.titles}>Favorite</Text>
         </View>
@@ -61,16 +62,14 @@ const styles = StyleSheet.create({
   header: {
     display: "flex",
     flexDirection: "row",
-    marginTop: 10,
+    marginTop: 24,
     marginLeft: 13,
     columnGap: 13,
   },
   titles: {
-    width: 161,
-    height: 24,
-    marginTop: 24,
+    // width: 161,
+    // height: 24,
     fontSize: 20,
-    lineHeight: 24.2,
     fontWeight: "700",
     color: "black",
   },

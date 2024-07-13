@@ -1,13 +1,18 @@
 import { AntDesign, Octicons } from "@expo/vector-icons";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import axios from "axios";
 import { Link } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Regenerate from '../../assets/icons/regenerate.svg';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import Regenerate from "../../assets/icons/regenerate.svg";
 const baseUrl = "https://chatgpt-api.shn.hk/v1/";
-
 const GenerateScreen = () => {
   const FavoriteList = [
     { id: 1, title: "Marie Sofia", des: "Gender, Jews, Marie" },
@@ -36,7 +41,7 @@ const GenerateScreen = () => {
   useEffect(() => {
     const loadSelectedItems = async () => {
       try {
-        const storedItems = await AsyncStorage.getItem('selectedItems');
+        const storedItems = await AsyncStorage.getItem("selectedItems");
         if (storedItems) {
           setSelectedItems(JSON.parse(storedItems));
         }
@@ -51,7 +56,10 @@ const GenerateScreen = () => {
   useEffect(() => {
     const storeSelectedItems = async () => {
       try {
-        await AsyncStorage.setItem('selectedItems', JSON.stringify(selectedItems));
+        await AsyncStorage.setItem(
+          "selectedItems",
+          JSON.stringify(selectedItems)
+        );
       } catch (error) {
         console.error("Failed to store selected items:", error);
       }
@@ -62,7 +70,9 @@ const GenerateScreen = () => {
 
   const toggleHeart = (item) => {
     if (selectedItems.some((selectedItem) => selectedItem.id === item.id)) {
-      setSelectedItems(selectedItems.filter((selectedItem) => selectedItem.id !== item.id));
+      setSelectedItems(
+        selectedItems.filter((selectedItem) => selectedItem.id !== item.id)
+      );
     } else {
       setSelectedItems([...selectedItems, item]);
     }
@@ -150,7 +160,7 @@ const GenerateScreen = () => {
         </Text>
       </View>
 
-      <View style={{justifyContent:'center', alignItems:'center'}}>
+      <View style={{ justifyContent: "center", alignItems: "center" }}>
         <View style={styles.container}>
           <Text style={styles.containerText}>{generatedName}</Text>
           <Text style={styles.containerText1}>
@@ -163,11 +173,8 @@ const GenerateScreen = () => {
             Meaning of this name is lorem Ipsum dolar, lorem Ipsum dolar lorem
             Ipsum, lorem Ipsum dolar lorem Ipsum, lorem Ipsum dolar lorem Ipsum
           </Text>
+        </View>
       </View>
-
-      </View>
-
-      
 
       <View style={{ flex: 1 }}>
         <Text
@@ -176,30 +183,40 @@ const GenerateScreen = () => {
             marginTop: 24,
             fontSize: 20,
             color: "#55A5A7",
-            fontWeight: '700',
+            fontWeight: "700",
           }}
         >
           Suggested Names
         </Text>
         <View style={{ flex: 1 }}>
-          <FlatList 
+          <FlatList
             style={{ marginTop: 16 }}
             data={FavoriteList}
             keyExtractor={(item) => item.id.toString()} // Ensure each item has a unique id
             renderItem={({ item }) => (
               <View style={styles.view1}>
                 <View style={styles.view2}>
-                  <Text style={{ fontSize: 16, lineHeight: 20, color: "#989898" }}>
+                  <Text
+                    style={{ fontSize: 16, lineHeight: 20, color: "#989898" }}
+                  >
                     {item.title}
                   </Text>
-                  <Text style={{ fontSize: 11, lineHeight: 20, color: "#989898" }}>
+                  <Text
+                    style={{ fontSize: 11, lineHeight: 20, color: "#989898" }}
+                  >
                     {item.des}
                   </Text>
                 </View>
 
                 <TouchableOpacity onPress={() => toggleHeart(item)}>
                   <AntDesign
-                    name={selectedItems.some((selectedItem) => selectedItem.id === item.id) ? "heart" : "hearto"} // Change icon based on state
+                    name={
+                      selectedItems.some(
+                        (selectedItem) => selectedItem.id === item.id
+                      )
+                        ? "heart"
+                        : "hearto"
+                    } // Change icon based on state
                     size={24}
                     color="#55A5A7"
                   />
@@ -210,18 +227,35 @@ const GenerateScreen = () => {
           />
         </View>
       </View>
-      <TouchableOpacity style={styles.generateButton} >
+      <View style={{
+              justifyContent: "center",
+              alignItems: "center",
+              display: "flex",
+            }}>
+
+        <TouchableOpacity onPress={handleGenerate} style={styles.generateButton}>
+          <Regenerate
+            style={{
+              
+            }}
+            selectedGender={selectedGender}
+            selectedRegion={selectedRegion}
+            surname={surname}
+          />
+  
+        </TouchableOpacity>
+      </View>
+      {/* <TouchableOpacity style={styles.generateButton} >
         <Regenerate  selectedGender={selectedGender}
           selectedRegion={selectedRegion}
           surname={surname}/>
        
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };
 
 export default GenerateScreen;
-
 
 const styles = StyleSheet.create({
   logo: {
@@ -229,7 +263,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     columnGap: 13.78,
     backgroundColor: "#55A5A7",
-    width: 385,
     height: 48,
     marginTop: 1.12,
     textAlignVertical: "center",
@@ -260,7 +293,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     display: "flex",
-    
+
     rowGap: 11,
   },
   view1: {
@@ -288,7 +321,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   containerText1: {
-    
     height: 10,
     fontSize: 8,
     lineHeight: 10,
@@ -304,7 +336,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     display: "flex",
-   
   },
   containerMeanText: {
     width: 286,
@@ -324,9 +355,8 @@ const styles = StyleSheet.create({
     lineHeight: 17,
     alignItems: "center",
     justifyContent: "center",
-    marginLeft: 73,
     marginTop: 40,
-    marginBottom:30
+    marginBottom: 30,
   },
   loadingContainer: {
     flex: 1,
@@ -352,26 +382,6 @@ const styles = StyleSheet.create({
     marginTop: 75,
   },
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import { EvilIcons, Octicons } from '@expo/vector-icons';
 // import { useNavigation, useRoute } from '@react-navigation/native';

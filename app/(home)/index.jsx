@@ -311,8 +311,12 @@ const HomeScreen = () => {
       <ScrollView>
         <View>
           <View
-            style={{ display: "flex", flexDirection: "row", columnGap: 145 }}
-           >
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
             <Text
               style={{
                 width: 161,
@@ -327,8 +331,11 @@ const HomeScreen = () => {
             >
               Name Generator
             </Text>
-            <View style={{display:'flex',}}>
-              <Link href={"/home_details"} style={{ marginTop: 24 }}>
+            <View style={{ display: "flex", marginRight: 19 }}>
+              <Link
+                href={"/home_details"}
+                style={{ marginTop: 24, justifyContent: "flex-end" }}
+              >
                 <AntDesign name="hearto" size={24} color="#55A5A7" />
               </Link>
             </View>
@@ -378,42 +385,43 @@ const HomeScreen = () => {
             >
               Select options
             </Text>
-            <View style={{alignItems:'center', justifyContent:'center'}}>
-            <View style={{ display: "flex", flexDirection: "row" }}>
-              <ScrollView
-                contentContainerStyle={{
-                  marginTop: 12,
-                  display: "flex",
-                  flexDirection: "column",
-                  // padding: 12,
-                  // rowGap: 10,
-                  marginHorizontal:8,
-                  shadowColor:"black"
-                  
-                }}
-              >
-                {homeContent.map((items) => (
-                  <HomeOptions
-                    data={items}
-                    key={items.id}
-                    setSelectedGender={setSelectedGender}
-                    setSelectedRegion={setSelectedRegion}
-                    setSurname={setSurname}
-                  />
-                ))}
-              </ScrollView>
+            <View style={{ alignItems: "center", justifyContent: "center" }}>
+              <View style={{ display: "flex", flexDirection: "row" }}>
+                <ScrollView
+                  contentContainerStyle={{
+                    marginTop: 12,
+                    display: "flex",
+                    flexDirection: "column",
+                    // padding: 12,
+                    // rowGap: 10,
+                    marginHorizontal: 8,
+                    shadowColor: "black",
+                  }}
+                >
+                  {homeContent.map((items) => (
+                    <HomeOptions
+                      data={items}
+                      key={items.id}
+                      setSelectedGender={setSelectedGender}
+                      setSelectedRegion={setSelectedRegion}
+                      setSurname={setSurname}
+                    />
+                  ))}
+                </ScrollView>
+              </View>
             </View>
-
-            </View>
-
-           
           </View>
-          <TouchableOpacity
-            onPress={handleGenerate}
-            style={{ justifyContent: "center", alignItems: "center" }}
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              display: "flex",
+            }}
           >
-            <Text style={styles.generateButton}>Generate</Text>
-          </TouchableOpacity>
+            <TouchableOpacity onPress={handleGenerate} style={styles.generateButton}>
+              <Text style={{ color: "white", textAlign:"center", textAlignVertical:'center' }}>Generate</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -426,14 +434,15 @@ const styles = StyleSheet.create({
   generateButton: {
     backgroundColor: "#55A5A7",
     width: 234,
-    height: 37,
+    // height: 37,
+    padding:10,
     borderRadius: 22,
     color: "white",
     textAlign: "center",
     fontSize: 14,
     lineHeight: 17,
     textAlignVertical: "center",
-    marginTop:50
+    marginTop: 50,
   },
   container: {
     height: 131,
