@@ -9,6 +9,7 @@ export default function Favorite() {
   const route = useRoute();
   const [selectedItems, setSelectedItems] = useState([]);
 
+
   useEffect(() => {
     const loadSelectedItems = async () => {
       try {

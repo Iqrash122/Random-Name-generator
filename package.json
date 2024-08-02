@@ -36,6 +36,7 @@
     "expo-updates": "~0.25.17",
     "expo-web-browser": "~13.0.3",
     "install": "^0.13.0",
+    "json-stringify-safe": "^5.0.1",
     "npm": "^10.8.1",
     "react": "18.2.0",
     "react-date-object": "^2.1.9",
